@@ -10,8 +10,7 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import useEnterKeyPress from "@/custom-hooks/useEnterKeyPress";
 import { Loader2 } from "lucide-react";
-import { Badge } from "@/components/ui/badge"
-import { set } from "nprogress";
+import { Badge } from "@/components/ui/badge";
 
 export default function Detail() {
     const { id } = useParams();
@@ -76,7 +75,7 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
     const handleOpenChange = (open: boolean) => {
         setIsOpen(open);
         setTimeout(() => {
-            navigate("/todos");
+            navigate("/");
         }, 300);
     }
 

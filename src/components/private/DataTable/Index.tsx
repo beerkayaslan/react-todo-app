@@ -32,7 +32,7 @@ export default function DataTable(dataTableProps: IDataTable) {
 
     const [inputValue, setInputValue] = React.useState("");
     const debouncedValue = useDebounce(inputValue, 400);
-
+    const [selectFilter, setSelectFilter] = React.useState("");
     const [deleteDialogId, setDeleteDialogId] = React.useState<string | null>(null);
 
     const handleChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,6 +45,7 @@ export default function DataTable(dataTableProps: IDataTable) {
         limit: 10,
         searchKeys: dataTableProps.searchKeys,
         search: "",
+        status: ""
     });
 
     React.useEffect(() => {
@@ -54,6 +55,14 @@ export default function DataTable(dataTableProps: IDataTable) {
             page: 1,
         });
     }, [debouncedValue]);
+
+    React.useEffect(() => {
+        setQuery({
+            ...query,
+            status: selectFilter || "",
+            page: 1,
+        });
+    }, [selectFilter]);
 
     const dataTableQueryProps = {
         dataUrl: dataTableProps.dataUrl,
@@ -124,6 +133,8 @@ export default function DataTable(dataTableProps: IDataTable) {
         });
     }, [query]);
 
+
+
     const table = useReactTable({
         data: data ? data.data : [],
         columns,
@@ -160,7 +171,7 @@ export default function DataTable(dataTableProps: IDataTable) {
             }
             <div className="w-full">
                 {
-                    <Header inputValue={inputValue} handleChange={handleChange} table={table} columnVisibility={columnVisibility} dataUrl={dataTableProps.dataUrl} setDeleteDialogId={setDeleteDialogId} isSelectedCheckbox={isSelectedCheckbox} />
+                    <Header inputValue={inputValue} handleChange={handleChange} table={table} columnVisibility={columnVisibility} dataUrl={dataTableProps.dataUrl} setDeleteDialogId={setDeleteDialogId} isSelectedCheckbox={isSelectedCheckbox} selectFilter={{ selectFilter, setSelectFilter }} />
                 }
                 {
                     <Body table={table} isLoading={isLoading} columns={columns} />

@@ -13,7 +13,8 @@ export enum AuthStatus {
 interface User {
     accessToken: string;
     refreshToken: string;
-    user: {
+    user?: {
+        _id: string;
         email: string;
     }
 }
@@ -21,6 +22,7 @@ interface User {
 interface AuthContextType {
     login: AuthStatus;
     setUserCookie: (value: string) => void;
+    user?: User | null;
 }
 
 let AuthContext = React.createContext<AuthContextType>(null!);
@@ -67,7 +69,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         }
     }, [user]);
 
-    const value = { login, setUserCookie };
+    const value = { login, setUserCookie, user };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

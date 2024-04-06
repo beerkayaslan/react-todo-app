@@ -25,10 +25,10 @@ export default function Router() {
         return (
             <Routes>
                 <Route Component={PrivateLayout}>
-                    <Route path="/todos" Component={Todos}>
-                        <Route path=":id" Component={TodosDetail} />
+                    <Route path="" Component={Todos}>
+                        <Route path="todos/:id" Component={TodosDetail} />
                     </Route>
-                    <Route path="*" element={<Navigate to="/todos" />} />
+                    <Route path="*" element={<Navigate to="/" />} />
                 </Route>
             </Routes>
         )

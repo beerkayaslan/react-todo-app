@@ -19,7 +19,7 @@ import { navItems } from "./NavMenu";
 
 export default function Header({ children }: { children: React.ReactNode }) {
 
-    const { setUserCookie } = useAuth();
+    const { setUserCookie, user } = useAuth();
 
     const logOut = () => {
         setUserCookie('');
@@ -66,6 +66,7 @@ export default function Header({ children }: { children: React.ReactNode }) {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuLabel>{user?.user?.email}</DropdownMenuLabel>
                     <DropdownMenuItem onClick={logOut}>Logout</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
