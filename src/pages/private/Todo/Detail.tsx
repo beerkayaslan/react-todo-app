@@ -27,7 +27,13 @@ export default function Detail() {
 export interface DetailContentProps {
     _id?: string;
     name: string;
-    shortName: string;
+    status: Status;
+}
+
+export enum Status {
+    OPEN = "OPEN",
+    IN_PROGRESS = "IN_PROGRESS",
+    DONE = "DONE",
 }
 
 function DetailContent({ data }: { data: DetailContentProps | "new" }) {
@@ -46,12 +52,11 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
         content = {
             _id: "",
             name: "",
-            shortName: "",
+            status: Status.OPEN,
         }
     } else {
         content = data;
     }
-
 
     const handleOpenChange = (open: boolean) => {
         setIsOpen(open);
@@ -63,7 +68,7 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
     const onSubmit: SubmitHandler<DetailContentProps> = (formData) => {
         setLoading(true);
         if (data === "new") {
-            postTodo.mutate(formData, {
+            postTodo.mutate({ ...formData, status: Status.OPEN }, {
                 onSuccess: () => {
                     handleOpenChange(false);
                     toast({
@@ -84,7 +89,7 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
             });
         }
         else {
-            const mutateData = { _id: content._id, name: formData.name, shortName: formData.shortName };
+            const mutateData = { _id: content._id, name: formData.name, status: formData.status };
             patchTodo.mutate(mutateData, {
                 onSuccess: () => {
                     handleOpenChange(false);

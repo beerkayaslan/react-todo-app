@@ -40,11 +40,22 @@ export default function Todos() {
             <DataTable
                 dataUrl="todos"
                 updateUrl="todos"
-                searchKeys={["name"]}
+                searchKeys={["name", "status"]}
                 columns={[
                     {
                         title: "Name",
                         key: "name",
+                    },
+                    {
+                        title: "Status",
+                        key: "status",
+                        columnRender: (data: any) => {
+                            return (
+                                <span className="text-sm text-muted-foreground">
+                                   test
+                                </span>
+                            )
+                        }
                     }
                 ]}
             />

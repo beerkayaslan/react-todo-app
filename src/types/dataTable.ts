@@ -13,6 +13,7 @@ export interface IDataTable {
     updateUrl?: string;
     searchKeys: string[];
     columns: {
+        columnRender?: any;
         title: string;
         key: string;
     }[];
