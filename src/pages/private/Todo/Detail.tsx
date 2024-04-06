@@ -11,6 +11,7 @@ import { useToast } from "@/components/ui/use-toast";
 import useEnterKeyPress from "@/custom-hooks/useEnterKeyPress";
 import { Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge"
+import { set } from "nprogress";
 
 export default function Detail() {
     const { id } = useParams();
@@ -54,10 +55,6 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
     const [fileBase64, setFileBase64] = useState<string>("");
     const [file, setFile] = useState<File | null>(null);
 
-    const [status, setStatus] = useState<Status>(Status.OPEN);
-
-
-
     if (data === "new") {
         content = {
             _id: "",
@@ -70,8 +67,11 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
         content = data;
     }
 
-    const [imageUrl, setImageUrl] = useState(content.imageUrl || "");
+    const [imgStatus, setImgStatus] = useState<"new" | "remove" | "dont-touch" | "remove-and-new-add">(data === "new" ? "new" : "dont-touch");
 
+
+    const [status, setStatus] = useState<Status>(content.status);
+    const [imageUrl, setImageUrl] = useState(content.imageUrl || "");
 
     const handleOpenChange = (open: boolean) => {
         setIsOpen(open);
@@ -83,7 +83,7 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
     const onSubmit: SubmitHandler<DetailContentProps> = (formData) => {
         setLoading(true);
         if (data === "new") {
-            postTodo.mutate({ ...formData, status: Status.OPEN, file, }, {
+            postTodo.mutate({ ...formData, status, file }, {
                 onSuccess: () => {
                     handleOpenChange(false);
                     toast({
@@ -104,7 +104,7 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
             });
         }
         else {
-            const mutateData = { _id: content._id, name: formData.name, status: formData.status, file: file ? file : (imageUrl ? 'dont-touch' : null) };
+            const mutateData = { _id: content._id, name: formData.name, status , file, imgStatus};
             patchTodo.mutate(mutateData, {
                 onSuccess: () => {
                     handleOpenChange(false);
@@ -137,8 +137,8 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
         input.value = "";
         setFile(null);
         setImageUrl("");
+        setImgStatus("remove");
     }
-
 
     return (
         <Sheet open={isOpen} onOpenChange={handleOpenChange}>
@@ -163,13 +163,14 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
                                 reader.onloadend = () => {
                                     setFileBase64(reader.result as string);
                                     setFile(file);
+                                    setImgStatus("new");
                                 }
                             }}
                         />
 
                         <div className="flex items-center  gap-x-2">
                             {
-                                !fileBase64 && (imageUrl && <img src={imageUrl} className="w-28 h-28 object-contain border my-2" alt="image" />)
+                                !fileBase64 && (imageUrl && <img src={`https://todo-app-nestjs-backend.s3.eu-north-1.amazonaws.com/${imageUrl}`} className="w-28 h-28 object-contain border my-2" alt="image" />)
                             }
                             {
                                 fileBase64 && <img src={fileBase64} className="w-28 h-28 object-contain border my-2" alt="image" />
@@ -215,7 +216,7 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
                                 onClick={() => {
                                     setStatus(Status.IN_PROGRESS);
                                 }}>
-                                <Badge className="text-sm bg-yellow-600 hover:bg-yellow-600">
+                                <Badge className="text-sm !bg-yellow-600 ">
                                     IN PROGRESS
                                 </Badge>
                             </div>
@@ -225,7 +226,7 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
                                 onClick={() => {
                                     setStatus(Status.DONE);
                                 }}>
-                                <Badge className="text-sm bg-green-600 hover:bg-green-600">
+                                <Badge className="text-sm !bg-green-600">
                                     DONE
                                 </Badge>
                             </div>

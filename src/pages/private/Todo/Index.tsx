@@ -10,6 +10,7 @@ import {
 import { Link } from "react-router-dom";
 import Header from "@/components/private/Header";
 import { Badge } from "@/components/ui/badge"
+import { Status } from "./Detail";
 
 
 export default function Todos() {
@@ -41,19 +42,17 @@ export default function Todos() {
             <DataTable
                 dataUrl="todos"
                 updateUrl="todos"
-                searchKeys={["imageUrl","name", "status"]}
+                searchKeys={["imageUrl", "name", "status"]}
                 columns={[
                     {
                         title: "Image",
                         key: "imageUrl",
-                        columnRender: (data: any) => (
-                            data ? 
+                        columnRender: (data: string) => (
                             <img
-                                src={data || "https://via.placeholder.com/150"}
+                                src={data ? `https://todo-app-nestjs-backend.s3.eu-north-1.amazonaws.com/${data}` : "https://fakeimg.pl/100x100/ebebeb/909090?text=IMAGE&font=bebas"}
                                 alt="Todo Image"
                                 className="w-12 h-12 rounded-full object-cover"
                             />
-                            : null
                         ),
                     },
                     {
@@ -63,24 +62,24 @@ export default function Todos() {
                     {
                         title: "Status",
                         key: "status",
-                        columnRender: (data: any) => {
+                        columnRender: (data: string) => {
                             switch (data) {
-                                case "OPEN":
+                                case Status.OPEN:
                                     return (
                                         <Badge className="text-sm">
-                                            {data}
+                                           OPEN
                                         </Badge>
                                     )
-                                case "IN_PROGRESS":
+                                case Status.IN_PROGRESS:
                                     return (
-                                        <Badge className="text-sm bg-yellow-600">
-                                            {data}
+                                        <Badge className="text-sm !bg-yellow-600">
+                                           IN PROGRESS
                                         </Badge>
                                     )
-                                case "DONE":
+                                case Status.DONE:
                                     return (
-                                        <Badge className="text-sm bg-green-600">
-                                            {data}
+                                        <Badge className="text-sm !bg-green-600">
+                                            DONE
                                         </Badge>
                                     )
                                 default:

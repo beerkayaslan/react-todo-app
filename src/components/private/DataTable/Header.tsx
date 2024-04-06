@@ -80,7 +80,7 @@ function Header({ inputValue, handleChange, table, dataUrl, setDeleteDialogId, i
                                             column.toggleVisibility(!!value)
                                         }
                                     >
-                                        {column.id}
+                                        {column.columnDef.header}
                                     </DropdownMenuCheckboxItem>
                                 )
                             })
