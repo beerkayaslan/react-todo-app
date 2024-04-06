@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Link } from "react-router-dom";
 import Header from "@/components/private/Header";
+import { Badge } from "@/components/ui/badge"
 
 
 export default function Todos() {
@@ -32,9 +33,9 @@ export default function Todos() {
 
             <div className="space-y-2.5">
                 <h3 className="text-2xl font-semibold leading-none tracking-tight">App Todos</h3>
-                <p className="text-sm text-muted-foreground"> 
+                <p className="text-sm text-muted-foreground">
                     Manage your todos here. You can create, update and delete todos.
-                 </p>
+                </p>
             </div>
 
             <DataTable
@@ -50,11 +51,32 @@ export default function Todos() {
                         title: "Status",
                         key: "status",
                         columnRender: (data: any) => {
-                            return (
-                                <span className="text-sm text-muted-foreground">
-                                   test
-                                </span>
-                            )
+                            switch (data) {
+                                case "OPEN":
+                                    return (
+                                        <Badge className="text-sm">
+                                            {data}
+                                        </Badge>
+                                    )
+                                case "IN_PROGRESS":
+                                    return (
+                                        <Badge className="text-sm bg-yellow-600">
+                                            {data}
+                                        </Badge>
+                                    )
+                                case "DONE":
+                                    return (
+                                        <Badge className="text-sm bg-green-600">
+                                            {data}
+                                        </Badge>
+                                    )
+                                default:
+                                    return (
+                                        <Badge className="text-sm text-muted-foreground">
+                                            {data}
+                                        </Badge>
+                                    )
+                            }
                         }
                     }
                 ]}

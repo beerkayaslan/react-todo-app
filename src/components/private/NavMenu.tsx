@@ -9,7 +9,7 @@ export const navItems = [
     {
         icon: Home,
         name: "Todos",
-        to: "/"
+        to: "/todos"
     },
 ];
 

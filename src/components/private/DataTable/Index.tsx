@@ -92,7 +92,7 @@ export default function DataTable(dataTableProps: IDataTable) {
                     id: column.key,
                     accessorKey: column.key,
                     header: column.title,
-                    cell: column.columnRender ? column.columnRender : ({ row }: { row: any }) => <div>{row.getValue(column.key)}</div>,
+                    cell: column.columnRender ? ({ row }: { row: any }) => column.columnRender(row.getValue(column.key)): ({ row }: { row: any }) => <div>{row.getValue(column.key)}</div>,
                 };
             }),
             {
