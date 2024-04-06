@@ -1,47 +1,16 @@
 import { cn } from "@/lib/utils";
 import {
     Home,
-    Package2,
-    Users,
-    Book,
-    Languages,
-    LayoutPanelTop,
-    LayoutList
+    Package2
 } from "lucide-react"
 import { Link, useLocation } from "react-router-dom"
-import SelectLang from "./SelectLang";
 
 export const navItems = [
     {
         icon: Home,
-        name: "Dashboard",
+        name: "Todos",
         to: "/"
     },
-    {
-        icon: LayoutPanelTop,
-        name: "Sections",
-        to: "/sections"
-    },
-    {
-        icon: Languages,
-        name: "App Langs",
-        to: "/langs"
-    },
-    {
-        icon: Book,
-        name: "Books",
-        to: "/books"
-    },
-    {
-        icon: Users,
-        name: "Authors",
-        to: "/authors"
-    },
-    {
-        icon: LayoutList,
-        name: "Categories",
-        to: "/categories"
-    }
 ];
 
 export default function NavMenu() {
@@ -54,7 +23,7 @@ export default function NavMenu() {
                 <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
                     <Link to="/" className="flex items-center gap-2 font-semibold">
                         <Package2 className="h-6 w-6" />
-                        <span className="">Acme Inc</span>
+                        <span className="">Playable Factory Inc</span>
                     </Link>
                 </div>
                 <div className="flex-1">
@@ -74,9 +43,6 @@ export default function NavMenu() {
                             ))
                         }
                     </nav>
-                </div>
-                <div className="mt-auto p-4">
-                    <SelectLang />
                 </div>
             </div>
         </div>

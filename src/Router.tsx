@@ -9,8 +9,8 @@ const Login = Loadable(lazy(() => import('@/pages/public/Login')));
 const Register = Loadable(lazy(() => import('@/pages/public/Register')));
 
 const PrivateLayout = Loadable(lazy(() => import('@/layouts/PrivateLayout')));
-const Langs = Loadable(lazy(() => import('@/pages/private/Langs/Index')));
-const LangsDetail = Loadable(lazy(() => import('@/pages/private/Langs/Detail')));
+const Todos = Loadable(lazy(() => import('@/pages/private/Todo/Index')));
+const TodosDetail = Loadable(lazy(() => import('@/pages/private/Todo/Detail')));
 const Loader = Loadable(lazy(() => import('@/components/Loader')));
 
 
@@ -25,8 +25,8 @@ export default function Router() {
         return (
             <Routes>
                 <Route Component={PrivateLayout}>
-                    <Route path="/todos" Component={Langs}>
-                        <Route path=":id" Component={LangsDetail} />
+                    <Route path="/todos" Component={Todos}>
+                        <Route path=":id" Component={TodosDetail} />
                     </Route>
                     <Route path="*" element={<Navigate to="/todos" />} />
                 </Route>

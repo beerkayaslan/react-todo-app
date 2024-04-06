@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet"
-import { useGetLangById, usePatchLang, usePostLang } from "@/query-hooks/useLang";
+import { useGetTodoById, usePatchTodo, usePostTodo } from "@/query-hooks/useTodos";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -13,7 +13,7 @@ import { Loader2 } from "lucide-react";
 
 export default function Detail() {
     const { id } = useParams();
-    const { data } = id !== "new" ? useGetLangById(id) : { data: "new" };
+    const { data } = id !== "new" ? useGetTodoById(id) : { data: "new" };
 
     return (
         <>
@@ -34,8 +34,8 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
     const [isOpen, setIsOpen] = useState(true);
     const navigate = useNavigate();
     let content: DetailContentProps;
-    const patchLang = usePatchLang();
-    const postLang = usePostLang();
+    const patchTodo = usePatchTodo();
+    const postTodo = usePostTodo();
     const { toast } = useToast();
 
     const { register, handleSubmit, formState: { errors } } = useForm<DetailContentProps>();
@@ -56,14 +56,14 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
     const handleOpenChange = (open: boolean) => {
         setIsOpen(open);
         setTimeout(() => {
-            navigate("/langs");
+            navigate("/todos");
         }, 300);
     }
 
-    const onSubmit: SubmitHandler<DetailContentProps> =(formData) => {
+    const onSubmit: SubmitHandler<DetailContentProps> = (formData) => {
         setLoading(true);
         if (data === "new") {
-            postLang.mutate(formData, {
+            postTodo.mutate(formData, {
                 onSuccess: () => {
                     handleOpenChange(false);
                     toast({
@@ -85,7 +85,7 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
         }
         else {
             const mutateData = { _id: content._id, name: formData.name, shortName: formData.shortName };
-            patchLang.mutate(mutateData, {
+            patchTodo.mutate(mutateData, {
                 onSuccess: () => {
                     handleOpenChange(false);
                     toast({
@@ -105,17 +105,17 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
                 }
             });
 
-            
+
         }
     }
 
     useEnterKeyPress('Enter', handleSubmit(onSubmit));
-    
+
     return (
         <Sheet open={isOpen} onOpenChange={handleOpenChange}>
             <SheetContent>
                 <SheetHeader>
-                    <SheetTitle>Edit Lang</SheetTitle>
+                    <SheetTitle>Edit Todo</SheetTitle>
                 </SheetHeader>
                 <div className="grid gap-4 py-4">
                     <div>
@@ -132,21 +132,6 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
                             })}
                         />
                         {errors.name && <p className="text-xs text-red-600">{errors.name.message}</p>}
-                    </div>
-                    <div>
-                        <Label htmlFor="shortName" className="text-right">
-                            Short Name
-                        </Label>
-                        <Input
-                            id="shortName"
-                            defaultValue={content.shortName}
-                            className={cn("col-span-3 my-1", errors.shortName && "!border-red-500")}
-                            {...register("shortName", {
-                                required: "Short Name is required",
-                                maxLength: 200,
-                            })}
-                        />
-                        {errors.shortName && <p className="text-xs text-red-600">{errors.shortName.message}</p>}
                     </div>
                 </div>
                 <SheetFooter>

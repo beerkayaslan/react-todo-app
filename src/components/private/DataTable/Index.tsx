@@ -22,7 +22,6 @@ import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom";
 import DeleteDialog from "./DeleteDialog";
 import { Progress } from "@/components/Loadable";
-import useLangState from "@/state/useLangState";
 
 
 export default function DataTable(dataTableProps: IDataTable) {
@@ -40,14 +39,12 @@ export default function DataTable(dataTableProps: IDataTable) {
         setInputValue(e.target.value);
     }, []);
 
-    const { lang } = useLangState();
 
     const [query, setQuery] = React.useState({
         page: 1,
         limit: 10,
         searchKeys: dataTableProps.searchKeys,
         search: "",
-        lang: lang.ShortName
     });
 
     React.useEffect(() => {
@@ -55,9 +52,8 @@ export default function DataTable(dataTableProps: IDataTable) {
             ...query,
             search: debouncedValue || "",
             page: 1,
-            lang: lang.ShortName
         });
-    }, [debouncedValue, lang]);
+    }, [debouncedValue]);
 
     const dataTableQueryProps = {
         dataUrl: dataTableProps.dataUrl,

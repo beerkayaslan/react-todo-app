@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import Header from "@/components/private/Header";
 
 
-export default function Langs() {
+export default function Todos() {
     return (
         <>
             <Header>
@@ -24,29 +24,27 @@ export default function Langs() {
                         </BreadcrumbItem>
                         <BreadcrumbSeparator />
                         <BreadcrumbItem>
-                            App Langs
+                            App Todos
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
             </Header>
 
             <div className="space-y-2.5">
-                <h3 className="text-2xl font-semibold leading-none tracking-tight">App Langs</h3>
-                <p className="text-sm text-muted-foreground">Language settings: Choose your preferred language for the app interface.</p>
+                <h3 className="text-2xl font-semibold leading-none tracking-tight">App Todos</h3>
+                <p className="text-sm text-muted-foreground"> 
+                    Manage your todos here. You can create, update and delete todos.
+                 </p>
             </div>
 
             <DataTable
-                dataUrl="langs"
-                updateUrl="langs"
-                searchKeys={["name", "shortName"]}
+                dataUrl="todos"
+                updateUrl="todos"
+                searchKeys={["name"]}
                 columns={[
                     {
                         title: "Name",
                         key: "name",
-                    },
-                    {
-                        title: "Short Name",
-                        key: "shortName",
                     }
                 ]}
             />

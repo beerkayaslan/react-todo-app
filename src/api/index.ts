@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { IDataTableApi, IDeleteDataTable } from '@/types/dataTable';
-import { DetailContentProps as LangDetailContentProps } from '@/pages/private/Langs/Detail';
+import { DetailContentProps as TodoDetailContentProps } from '@/pages/private/Todo/Detail';
 
 export const instance = axios.create({
     baseURL: 'http://localhost:3000/v1/',
@@ -70,27 +70,27 @@ export const deleteDataTable = async (data: IDeleteDataTable) => {
 }
 
 
-export const getLangById = async (id: string | undefined) => {
+export const getTodoById = async (id: string | undefined) => {
     try {
-        const response = await instance.get(`langs/${id}`);
+        const response = await instance.get(`todos/${id}`);
         return response.data;
     } catch (error: any) {
         throw new Error(String(error.response.data.message));
     }
 }
 
-export const patchLang = async (data: LangDetailContentProps) => {
+export const patchTodo = async (data: TodoDetailContentProps) => {
     try {
-        const response = await instance.patch('langs', data);
+        const response = await instance.patch('todos', data);
         return response.data;
     } catch (error: any) {
         throw new Error(String(error.response.data.message));
     }
 }
 
-export const postLang = async (data: LangDetailContentProps) => {
+export const postTodo = async (data: TodoDetailContentProps) => {
     try {
-        const response = await instance.post('langs', data);
+        const response = await instance.post('todos', data);
         return response.data;
     } catch (error: any) {
         throw new Error(String(error.response.data.message));
