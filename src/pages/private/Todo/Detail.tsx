@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import useEnterKeyPress from "@/custom-hooks/useEnterKeyPress";
 import { Loader2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge"
 
 export default function Detail() {
     const { id } = useParams();
@@ -28,6 +29,8 @@ export interface DetailContentProps {
     _id?: string;
     name: string;
     status: Status;
+    file?: File | null | string;
+    imageUrl?: string;
 }
 
 export enum Status {
@@ -48,15 +51,27 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
 
     const [loading, setLoading] = useState(false);
 
+    const [fileBase64, setFileBase64] = useState<string>("");
+    const [file, setFile] = useState<File | null>(null);
+
+    const [status, setStatus] = useState<Status>(Status.OPEN);
+
+
+
     if (data === "new") {
         content = {
             _id: "",
             name: "",
             status: Status.OPEN,
+            file: null,
         }
-    } else {
+    }
+    else {
         content = data;
     }
+
+    const [imageUrl, setImageUrl] = useState(content.imageUrl || "");
+
 
     const handleOpenChange = (open: boolean) => {
         setIsOpen(open);
@@ -68,7 +83,7 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
     const onSubmit: SubmitHandler<DetailContentProps> = (formData) => {
         setLoading(true);
         if (data === "new") {
-            postTodo.mutate({ ...formData, status: Status.OPEN }, {
+            postTodo.mutate({ ...formData, status: Status.OPEN, file, }, {
                 onSuccess: () => {
                     handleOpenChange(false);
                     toast({
@@ -89,7 +104,7 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
             });
         }
         else {
-            const mutateData = { _id: content._id, name: formData.name, status: formData.status };
+            const mutateData = { _id: content._id, name: formData.name, status: formData.status, file: file ? file : (imageUrl ? 'dont-touch' : null) };
             patchTodo.mutate(mutateData, {
                 onSuccess: () => {
                     handleOpenChange(false);
@@ -116,6 +131,15 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
 
     useEnterKeyPress('Enter', handleSubmit(onSubmit));
 
+    const removeHandleImage = () => {
+        setFileBase64("");
+        const input = document.getElementById("image") as HTMLInputElement;
+        input.value = "";
+        setFile(null);
+        setImageUrl("");
+    }
+
+
     return (
         <Sheet open={isOpen} onOpenChange={handleOpenChange}>
             <SheetContent>
@@ -123,6 +147,38 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
                     <SheetTitle>Edit Todo</SheetTitle>
                 </SheetHeader>
                 <div className="grid gap-4 py-4">
+                    <div>
+                        <Label htmlFor="image" className="mb-2 block">
+                            Image Upload
+                        </Label>
+                        <Input
+                            id="image"
+                            type="file"
+                            accept="image/png, image/gif, image/jpeg"
+                            onChange={(e: any) => {
+                                const file = e.target.files[0];
+                                const reader = new FileReader();
+                                console.log(file);
+                                reader.readAsDataURL(file)
+                                reader.onloadend = () => {
+                                    setFileBase64(reader.result as string);
+                                    setFile(file);
+                                }
+                            }}
+                        />
+
+                        <div className="flex items-center  gap-x-2">
+                            {
+                                !fileBase64 && (imageUrl && <img src={imageUrl} className="w-28 h-28 object-contain border my-2" alt="image" />)
+                            }
+                            {
+                                fileBase64 && <img src={fileBase64} className="w-28 h-28 object-contain border my-2" alt="image" />
+                            }
+                            {
+                                (fileBase64 || imageUrl) && <Button variant="destructive" onClick={removeHandleImage}>Remove Image</Button>
+                            }
+                        </div>
+                    </div>
                     <div>
                         <Label htmlFor="name" className="text-right">
                             Name
@@ -138,6 +194,43 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
                         />
                         {errors.name && <p className="text-xs text-red-600">{errors.name.message}</p>}
                     </div>
+                    <div>
+                        <Label htmlFor="status" className="block">
+                            Status
+                        </Label>
+                        <div className="flex gap-x-2 mt-4 select-none">
+                            <div className={cn('border p-2 rounded cursor-pointer', {
+                                'ring ring-blue-600': status === Status.OPEN
+                            })} aria-label={Status.OPEN}
+                                onClick={() => {
+                                    setStatus(Status.OPEN);
+                                }}>
+                                <Badge className="text-sm" >
+                                    OPEN
+                                </Badge>
+                            </div>
+                            <div className={cn('border p-2 rounded cursor-pointer', {
+                                'ring ring-blue-600': status === Status.IN_PROGRESS
+                            })} aria-label={Status.IN_PROGRESS}
+                                onClick={() => {
+                                    setStatus(Status.IN_PROGRESS);
+                                }}>
+                                <Badge className="text-sm bg-yellow-600 hover:bg-yellow-600">
+                                    IN PROGRESS
+                                </Badge>
+                            </div>
+                            <div className={cn('border p-2 rounded cursor-pointer', {
+                                'ring ring-blue-600': status === Status.DONE
+                            })} aria-label={Status.DONE}
+                                onClick={() => {
+                                    setStatus(Status.DONE);
+                                }}>
+                                <Badge className="text-sm bg-green-600 hover:bg-green-600">
+                                    DONE
+                                </Badge>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <SheetFooter>
                     <Button onClick={handleSubmit(onSubmit)} disabled={loading}>
@@ -149,3 +242,5 @@ function DetailContent({ data }: { data: DetailContentProps | "new" }) {
         </Sheet>
     )
 }
+
+

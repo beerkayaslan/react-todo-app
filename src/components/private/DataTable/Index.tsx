@@ -99,7 +99,6 @@ export default function DataTable(dataTableProps: IDataTable) {
                 id: "actions",
                 header: "Actions",
                 cell: ({ row }: { row: any }) => {
-
                     return (
                         <div className="space-x-2 whitespace-nowrap">
                             <Link to={"/" + dataTableProps.updateUrl + "/" + row.original._id}><Button className="bg-orange-400 hover:bg-orange-300" size="icon"><Pencil className="w-4 h-4" /></Button></Link>

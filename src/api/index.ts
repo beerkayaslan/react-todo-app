@@ -81,7 +81,15 @@ export const getTodoById = async (id: string | undefined) => {
 
 export const patchTodo = async (data: TodoDetailContentProps) => {
     try {
-        const response = await instance.patch('todos', data);
+        const response = await instance.patch(
+            `todos/${data._id}`,
+            data,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+        );
         return response.data;
     } catch (error: any) {
         throw new Error(String(error.response.data.message));
@@ -90,7 +98,14 @@ export const patchTodo = async (data: TodoDetailContentProps) => {
 
 export const postTodo = async (data: TodoDetailContentProps) => {
     try {
-        const response = await instance.post('todos', data);
+        const response = await instance.post(
+            'todos',
+            data,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
         return response.data;
     } catch (error: any) {
         throw new Error(String(error.response.data.message));

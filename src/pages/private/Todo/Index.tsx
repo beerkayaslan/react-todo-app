@@ -41,8 +41,21 @@ export default function Todos() {
             <DataTable
                 dataUrl="todos"
                 updateUrl="todos"
-                searchKeys={["name", "status"]}
+                searchKeys={["imageUrl","name", "status"]}
                 columns={[
+                    {
+                        title: "Image",
+                        key: "imageUrl",
+                        columnRender: (data: any) => (
+                            data ? 
+                            <img
+                                src={data || "https://via.placeholder.com/150"}
+                                alt="Todo Image"
+                                className="w-12 h-12 rounded-full object-cover"
+                            />
+                            : null
+                        ),
+                    },
                     {
                         title: "Name",
                         key: "name",
