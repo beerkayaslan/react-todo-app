@@ -6,6 +6,7 @@ import Loadable from "@/components/Loadable";
 
 const PublicLayout = Loadable(lazy(() => import('@/layouts/PublicLayout')));
 const Login = Loadable(lazy(() => import('@/pages/public/Login')));
+const Register = Loadable(lazy(() => import('@/pages/public/Register')));
 
 const PrivateLayout = Loadable(lazy(() => import('@/layouts/PrivateLayout')));
 const Langs = Loadable(lazy(() => import('@/pages/private/Langs/Index')));
@@ -37,6 +38,7 @@ export default function Router() {
         <Routes>
             <Route Component={PublicLayout}>
                 <Route path="/login" Component={Login} />
+                <Route path="/register" Component={Register} />
                 <Route path="*" element={<Navigate to="/login" />} />
             </Route>
         </Routes>

@@ -18,6 +18,15 @@ export const login = async ({ email, password }: { email: string; password: stri
     }
 }
 
+export const register = async ({ email, password }: { email: string; password: string; }) => {
+    try {
+        const response = await instance.post(`auth/register`, { email, password });
+        return response.data;
+    } catch (error: any) {
+        throw new Error(String(error.response.data.message));
+    }
+}
+
 export const refresh = async ({ token }: { token: string }) => {
     try {
         const response = await instance.post(`auth/refresh`, { token });

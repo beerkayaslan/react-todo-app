@@ -11,8 +11,8 @@ export enum AuthStatus {
 }
 
 interface User {
-    access_token: string;
-    refresh_token: string;
+    accessToken: string;
+    refreshToken: string;
     user: {
         email: string;
     }
@@ -43,12 +43,12 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
             return;
         }
 
-        instance.defaults.headers.common['Authorization'] = 'Bearer ' + user.access_token;
+        instance.defaults.headers.common['Authorization'] = 'Bearer ' + user.accessToken;
         const myInterceptors = instance.interceptors.response.use(response => {
             return response;
         }, error => {
             if (error.response.status === 401) {
-                refresh({ token: user.refresh_token }).then((response: any) => {
+                refresh({ token: user.refreshToken }).then((response: any) => {
                     setUserCookie(JSON.stringify(response));
                     console.log('refreshed');
                 }).catch(() => {
