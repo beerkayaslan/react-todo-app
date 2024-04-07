@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useRegister } from "@/query-hooks/useAuth";
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from "lucide-react";
@@ -22,7 +22,6 @@ export default function Register() {
 
     const [loading, setLoading] = useState(false);
 
-    const navigate = useNavigate();
 
     const registerMutation = useRegister();
     const { setUserCookie } = useAuth();
@@ -33,7 +32,6 @@ export default function Register() {
         registerMutation.mutate(data, {
             onSuccess: (data) => {
                 setUserCookie(JSON.stringify(data));
-                navigate('/');
             },
             onError: (error: any) => {
                 toast({
