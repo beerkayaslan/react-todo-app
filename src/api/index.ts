@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { IDataTableApi, IDeleteDataTable } from '@/types/dataTable';
 import { DetailContentProps as TodoDetailContentProps } from '@/pages/private/Todo/Detail';
+export const apiUrl = 'http://localhost:3000/v1/';
 
 export const instance = axios.create({
-    baseURL: 'http://localhost:3000/v1/',
+    baseURL: apiUrl,
     headers: {
         'Content-Type': 'application/json',
     }

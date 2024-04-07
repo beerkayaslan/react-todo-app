@@ -100,7 +100,6 @@ export default function Register() {
                         Register
                     </Button>
                 </div>
-
                 <div className="mt-4 text-center text-sm">
                     Already have an account? {" "}
                     <Link to="/login" className="underline text-blue-500">

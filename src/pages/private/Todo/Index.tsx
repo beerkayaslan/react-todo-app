@@ -11,9 +11,28 @@ import { Link } from "react-router-dom";
 import Header from "@/components/private/Header";
 import { Badge } from "@/components/ui/badge"
 import { Status } from "./Detail";
-
+import { apiUrl } from "@/api";
+import { Download } from "lucide-react";
 
 export default function Todos() {
+
+    const downloadHandleImg = (data: string) => {
+        if (data) {
+            const url = `${apiUrl}awss3upload/${data}`;
+            fetch(url)
+                .then(response => {
+                    response.blob().then(blob => {
+                        let url = window.URL.createObjectURL(blob);
+                        let a = document.createElement('a');
+                        a.href = url;
+                        a.download = data;
+                        a.click();
+                    });
+                });
+        }
+    }
+
+
     return (
         <>
             <Header>
@@ -48,11 +67,18 @@ export default function Todos() {
                         title: "Image",
                         key: "imageUrl",
                         columnRender: (data: string) => (
-                            <img
-                                src={data ? `https://todo-app-nestjs-backend.s3.eu-north-1.amazonaws.com/${data}` : "https://fakeimg.pl/100x100/ebebeb/909090?text=IMAGE&font=bebas"}
-                                alt="Todo Image"
-                                className="w-12 h-12 rounded-full object-cover"
-                            />
+                            <div className="relative group w-12 h-12" onClick={() => downloadHandleImg(data)}>
+                                <img
+                                    src={data ? `https://todo-app-nestjs-backend.s3.eu-north-1.amazonaws.com/${data}` : "https://fakeimg.pl/100x100/ebebeb/909090?text=IMAGE&font=bebas"}
+                                    alt="Todo Image"
+                                    className="w-full h-full rounded-full object-cover"
+                                />
+                                {
+                                    data && <div className="bg-blue-500 cursor-pointer absolute left-0 top-0 w-full h-full  rounded-full bg-opacity-40  items-center justify-center hidden group-hover:flex z-30">
+                                        <Download className="w-4 h-4" color="white" />
+                                    </div>
+                                }
+                            </div>
                         ),
                     },
                     {
@@ -67,13 +93,13 @@ export default function Todos() {
                                 case Status.OPEN:
                                     return (
                                         <Badge className="text-sm">
-                                           OPEN
+                                            OPEN
                                         </Badge>
                                     )
                                 case Status.IN_PROGRESS:
                                     return (
                                         <Badge className="text-sm !bg-yellow-600">
-                                           IN PROGRESS
+                                            IN PROGRESS
                                         </Badge>
                                     )
                                 case Status.DONE:
