@@ -1,9 +1,9 @@
 
-import { ChevronDown, CirclePlus, ListFilter, Settings2, Trash2, X, } from "lucide-react"
+import { CirclePlus, ListFilter, Settings2, Trash2, X, } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
-import { memo, useCallback, useState } from "react"
+import { memo, useCallback } from "react"
 import { Link } from "react-router-dom"
 import { Status } from "@/pages/private/Todo/Detail"
 
